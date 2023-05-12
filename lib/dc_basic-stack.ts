@@ -13,7 +13,8 @@ export class DcBasicStack extends cdk.Stack {
 
     const pipeline = new Pipeline(this, 'Pipeline', {
       pipelineName: 'Pipeline',
-      crossAccountKeys: false
+      crossAccountKeys: false,
+      restartExecutionOnUpdate: true
     });
 
     const cdkSourceOutput = new Artifact('CdkSourceOutput')
