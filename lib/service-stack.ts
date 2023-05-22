@@ -19,20 +19,20 @@ export class ServiceStack extends Stack {
 			tableName: 'Provider'
 		});
 
-		const lambdaARole = new Role(this, 'LambdaRole', {
-			assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
-		  });
+		// const lambdaARole = new Role(this, 'LambdaRole', {
+		// 	assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
+		//   });
 
-		  lambdaARole.addManagedPolicy(
-			ManagedPolicy.fromAwsManagedPolicyName('AmazonDynamoDBFullAccess')
-		  );
+		//   lambdaARole.addManagedPolicy(
+		// 	ManagedPolicy.fromAwsManagedPolicyName('AmazonDynamoDBFullAccess')
+		//   );
 
 		const expressLambda = new Function(this, 'ServiceLambda', {
 			runtime: Runtime.NODEJS_18_X,
 			handler: 'src/lambda.handler',
 			code: this.serviceCode,
 			functionName: 'ServiceLambda',
-			role: lambdaARole,
+			// role: lambdaARole,
 		})
 
 		const api = new LambdaRestApi(this, 'DcBasicApi', {
