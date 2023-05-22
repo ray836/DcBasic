@@ -13,11 +13,11 @@ export class ServiceStack extends Stack {
 		this.serviceCode = Code.fromCfnParameters()
 
 
-		const providerTable = new Table(this, 'ProviderTable', {
-			partitionKey: {name: 'id', type: AttributeType.STRING},
-			billingMode: BillingMode.PAY_PER_REQUEST,
-			tableName: 'Provider'
-		});
+		// const providerTable = new Table(this, 'ProviderTable', {
+		// 	partitionKey: {name: 'id', type: AttributeType.STRING},
+		// 	billingMode: BillingMode.PAY_PER_REQUEST,
+		// 	tableName: 'Provider'
+		// });
 
 		// const lambdaARole = new Role(this, 'LambdaRole', {
 		// 	assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
