@@ -1,4 +1,4 @@
-import { Stack, StackProps } from "aws-cdk-lib";
+import { RemovalPolicy, Stack, StackProps } from "aws-cdk-lib";
 import { LambdaRestApi } from "aws-cdk-lib/aws-apigateway";
 import { AttributeType, BillingMode, Table } from "aws-cdk-lib/aws-dynamodb";
 import { ManagedPolicy, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
@@ -13,11 +13,12 @@ export class ServiceStack extends Stack {
 		this.serviceCode = Code.fromCfnParameters()
 
 
-		// const providerTable = new Table(this, 'ProviderTable', {
-		// 	partitionKey: {name: 'id', type: AttributeType.STRING},
-		// 	billingMode: BillingMode.PAY_PER_REQUEST,
-		// 	tableName: 'Provider'
-		// });
+		const providerTable = new Table(this, 'ProviderTable', {
+			partitionKey: {name: 'id', type: AttributeType.STRING},
+			billingMode: BillingMode.PAY_PER_REQUEST,
+			tableName: 'CareProvider',
+			removalPolicy: RemovalPolicy.DESTROY
+		});
 
 		// const lambdaARole = new Role(this, 'LambdaRole', {
 		// 	assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
@@ -32,8 +33,13 @@ export class ServiceStack extends Stack {
 			handler: 'src/lambda.handler',
 			code: this.serviceCode,
 			functionName: 'ServiceLambda',
+			environment: {
+				PROVIDER_TABLE: providerTable.tableName
+			}
 			// role: lambdaARole,
-		})
+		});
+
+		providerTable.grantReadWriteData(expressLambda);
 
 		const api = new LambdaRestApi(this, 'DcBasicApi', {
 			handler: expressLambda,
